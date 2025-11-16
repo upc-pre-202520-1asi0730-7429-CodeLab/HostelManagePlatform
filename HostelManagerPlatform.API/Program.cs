@@ -71,7 +71,9 @@ builder.Services.AddScoped<IUserQueryService, UserQueryService>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IHotelCommandService, HotelCommandService>();
 builder.Services.AddScoped<IHotelQueryService, HotelQueryService>();
-
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

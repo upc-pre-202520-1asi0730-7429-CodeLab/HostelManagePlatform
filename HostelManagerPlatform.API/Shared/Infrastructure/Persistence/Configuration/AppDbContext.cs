@@ -2,17 +2,19 @@
 using HostelManagerPlatform.API.Hotels.Domain.Model.Aggregates;
 using HostelManagerPlatform.API.Shared.Infrastructure.Persistence.Configuration.Extensions;
 using HostelManagerPlatform.API.Users.Domain.Model.Aggregates;
-using Microsoft.EntityFrameworkCore;
+using HostelManagerPlatform.API.Subscriptions.Domain.Model;
 
+using Microsoft.EntityFrameworkCore;
 namespace HostelManagerPlatform.API.Shared.Infrastructure.Persistence.Configuration;
 
 public class AppDbContext(DbContextOptions options) : DbContext(options)
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder builder)
+    public DbSet<Subscription> Subscriptions { get; set; }  protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
         builder.AddCreatedUpdatedInterceptor();
         base.OnConfiguring(builder);
     }
+    public DbSet<Subscription> Subscriptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,7 +43,12 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // Configuración de la clave foránea UsersId
         // Asumiendo que UsersId es una FK a una tabla 'Users' o similar
         builder.Entity<Hotel>().Property(h => h.UsersId).IsRequired(false); // El FK puede ser nulo (int?)
-        
+        builder.Entity<Subscription>().HasKey(s => s.Id);
+        builder.Entity<Subscription>().Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Subscription>().Property(s => s.TypePlan).IsRequired().HasMaxLength(45); // Asumiendo MaxLength 45
+        builder.Entity<Subscription>().Property(s => s.NumberCard).IsRequired().HasMaxLength(45); // Asumiendo MaxLength 45
+        builder.Entity<Subscription>().Property(s => s.Date).IsRequired().HasMaxLength(45); // Asumiendo MaxLength 45
+        builder.Entity<Subscription>().Property(s => s.Cvv).IsRequired().HasMaxLength(45); // Asumiendo MaxLength 45  
         builder.UseSnakeCaseNamingConvention();
     }
 }
